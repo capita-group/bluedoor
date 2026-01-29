@@ -118,25 +118,25 @@ export default function Navbar() {
             "
             >
               <Link href="/" className="block">
-              <div
-                    className="
-                      relative h-42 w-35
-                      rounded-full border border-white/80
-                      backdrop-blur-lg
-                      shadow-[0_2px_2px_rgba(0,102,204,0.16),0_12px_20px_rgba(0,102,204,0.08)]
-                      p-5
-                      transition-transform duration-300
-                      hover:scale-105
-                    "
-                  >
-                    <Image
-                      src="/img/logo.png"
-                      alt="Restaurant Logo"
-                      fill
-                      className="object-contain"
-                      priority
-                    />
-                  </div>
+             <div
+                  className="
+                    relative h-42 w-35
+                    rounded-full border border-white/80
+                    backdrop-blur-lg
+                    shadow-[0_2px_2px_rgba(0,102,204,0.16),0_12px_20px_rgba(0,102,204,0.08)]
+                    p-5
+                    transition-transform duration-300
+                    hover:scale-90
+                  "
+                >
+                  <Image
+                    src="/img/logo.png"
+                    alt="Restaurant Logo"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
               </Link>
             </div>
 

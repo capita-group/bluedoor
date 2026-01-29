@@ -26,23 +26,6 @@
 }
 
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-1: radial-gradient(
-      circle at 15% 50%,
-      #0F172A 0%,
-      #020617 45%,
-      #0F172A 100%
-    );
-
-    --bg-2: linear-gradient(
-      90deg,
-      rgba(15,23,42,0.90) 0%,
-      rgba(2,6,23,0.95) 45%,
-      rgba(15,23,42,0.90) 100%
-    );
-  }
-}
 
 body {
   background:
