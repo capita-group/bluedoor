@@ -1,21 +1,13 @@
-
 import CommonBanner from "@/components/common/CommonBanner";
-import AwardsSection from "@/components/sections/menu/AwardsSection";
-import ChefsSection from "@/components/sections/menu/ChefsSection";
-import Image from "next/image";
+import AwardsSection from "@/components/sections/chef/AwardsSection";
+import ChefsSection from "@/components/sections/chef/ChefsSection";
 
 export default function OurChefPage() {
   return (
     <>
-      {/* Banner */}
-      <CommonBanner
-        title="Our Chef"
-        about="Chef"
-      />
-
-     
-    <ChefsSection/>
-    <AwardsSection/>
+      <CommonBanner title="Our Chef" about="Chef" />
+      <ChefsSection />
+      <AwardsSection />
     </>
   );
 }

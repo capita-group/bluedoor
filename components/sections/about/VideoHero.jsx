@@ -5,21 +5,31 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 export default function VideoHero({
-  poster = "/img/your-poster.jpg", // put your image here (like screenshot)
-  videoSrc = "/video/banner.mp4",   // video to play on click
-  height = "h-[220px] sm:h-[340px] md:h-[420px] lg:h-[520px]",
+  poster = "/img/your-poster.jpg",
+  videoSrc = "/video/banner.mp4",
+  height = "h-[260px] sm:h-[340px] md:h-[420px] lg:h-[520px]",
 }) {
   const [open, setOpen] = useState(false);
   const videoRef = useRef(null);
 
-  // close on ESC
+  // ESC close
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // pause when closed
+  // lock scroll when open
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  // reset video when closed
   useEffect(() => {
     if (!open && videoRef.current) {
       try {
@@ -33,7 +43,6 @@ export default function VideoHero({
     <>
       <section className="relative w-full">
         <div className={`relative w-full overflow-hidden ${height}`}>
-          {/* Background Image */}
           <Image
             src={poster}
             alt="Video cover"
@@ -43,23 +52,21 @@ export default function VideoHero({
             sizes="100vw"
           />
 
-          {/* soft dark overlay */}
-          <div className="absolute inset-0 bg-black/20" />
+          {/* overlay */}
+          <div className="absolute inset-0 bg-black/25 sm:bg-black/20" />
 
-          {/* Center Play Button */}
+          {/* Play Button */}
           <button
             type="button"
             aria-label="Play video"
             onClick={() => setOpen(true)}
-            className="group absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-                       grid place-items-center outline-none"
+            className="group absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 grid place-items-center outline-none"
           >
-            {/* outer octagon ring */}
             <span
               className="relative grid place-items-center"
               style={{
-                width: 86,
-                height: 86,
+                width: 78,
+                height: 78,
                 clipPath:
                   "polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%)",
                 border: "1px solid rgba(255,255,255,0.45)",
@@ -68,18 +75,16 @@ export default function VideoHero({
                 WebkitBackdropFilter: "blur(2px)",
               }}
             >
-              {/* inner octagon */}
               <span
                 className="grid place-items-center transition-transform duration-300 group-hover:scale-[1.04]"
                 style={{
-                  width: 62,
-                  height: 62,
+                  width: 56,
+                  height: 56,
                   clipPath:
                     "polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%)",
                   border: "1px solid rgba(255,255,255,0.30)",
                 }}
               >
-                {/* play triangle */}
                 <span
                   className="ml-[2px] block"
                   style={{
@@ -91,22 +96,12 @@ export default function VideoHero({
                   }}
                 />
               </span>
-
-              {/* subtle pulse */}
-              <span
-                className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{
-                  clipPath:
-                    "polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%)",
-                  boxShadow: "0 0 0 14px rgba(255,255,255,0.06)",
-                }}
-              />
             </span>
           </button>
         </div>
       </section>
 
-      {/* Modal Video */}
+      {/* Modal */}
       {open && (
         <div
           className="fixed inset-0 z-[999] bg-black/70 backdrop-blur-sm"
