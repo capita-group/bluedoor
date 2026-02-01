@@ -7,22 +7,22 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 
 const images = [
-  { src: "/img/connect (1).jpg", aspect: "aspect-[4/3]" },
-  { src: "/img/connect (2).jpg", aspect: "aspect-[3/4]" },
-  { src: "/img/connect (3).jpg", aspect: "aspect-[1/1]" },
-  { src: "/img/connect (4).jpg", aspect: "aspect-[16/9]" },
-  { src: "/img/connect (5).jpg", aspect: "aspect-[4/3]" },
-  { src: "/img/connect (6).jpg", aspect: "aspect-[3/4]" },
-  { src: "/img/connect (7).jpg", aspect: "aspect-[1/1]" },
+  { src: "/img/connect.jpg", aspect: "aspect-[4/3]" },
+  { src: "/img/connectTwo.jpg", aspect: "aspect-[3/4]" },
+  { src: "/img/connectThree.jpg", aspect: "aspect-[1/1]" },
+  { src: "/img/connectFour.jpg", aspect: "aspect-[16/9]" },
+  { src: "/img/connectFive.jpg", aspect: "aspect-[4/3]" },
+  { src: "/img/connectSix.jpg", aspect: "aspect-[3/4]" },
+  { src: "/img/connectSeven.jpg", aspect: "aspect-[1/1]" },
 
   // duplicate (seamless loop)
-  { src: "/img/connect (1).jpg", aspect: "aspect-[4/3]" },
-  { src: "/img/connect (2).jpg", aspect: "aspect-[3/4]" },
-  { src: "/img/connect (3).jpg", aspect: "aspect-[1/1]" },
-  { src: "/img/connect (4).jpg", aspect: "aspect-[16/9]" },
-  { src: "/img/connect (5).jpg", aspect: "aspect-[4/3]" },
-  { src: "/img/connect (6).jpg", aspect: "aspect-[3/4]" },
-  { src: "/img/connect (7).jpg", aspect: "aspect-[1/1]" },
+    { src: "/img/connect.jpg", aspect: "aspect-[4/3]" },
+  { src: "/img/connectTwo.jpg", aspect: "aspect-[3/4]" },
+  { src: "/img/connectThree.jpg", aspect: "aspect-[1/1]" },
+  { src: "/img/connectFour.jpg", aspect: "aspect-[16/9]" },
+  { src: "/img/connectFive.jpg", aspect: "aspect-[4/3]" },
+  { src: "/img/connectSix.jpg", aspect: "aspect-[3/4]" },
+  { src: "/img/connectSeven.jpg", aspect: "aspect-[1/1]" },
 ];
 
 export default function ConnectWithUs() {

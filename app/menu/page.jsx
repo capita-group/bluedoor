@@ -7,7 +7,6 @@ export default function MenuPage() {
     <>
       <CommonBanner title="Our Menu" about="Menu" />
       <MenuSection/>
-
     </>
   );
 }

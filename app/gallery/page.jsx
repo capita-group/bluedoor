@@ -3,13 +3,13 @@ import CommonBanner from "@/components/common/CommonBanner";
 import Image from "next/image";
 
 const galleryImages = [
-  "/img/connect (1).jpg",
-  "/img/connect (2).jpg",
-  "/img/connect (3).jpg",
-  "/img/connect (4).jpg",
-  "/img/connect (5).jpg",
-  "/img/connect (6).jpg",
-  "/img/connect (7).jpg",
+  "/img/connect.jpg",
+  "/img/connectTwo.jpg",
+  "/img/connectThree.jpg",
+  "/img/connectFour.jpg",
+  "/img/connectFive.jpg",
+  "/img/connectSix.jpg",
+  "/img/connectSeven.jpg",
 ];
 
 export default function GalleryPage() {
