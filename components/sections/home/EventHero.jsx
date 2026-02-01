@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-// ✅ import image from /public/img
 import plateImg from "@/public/img/eventHero.jpg";
 import AnimatedButton from "@/components/ui/AnimatedButton";
 
@@ -21,10 +20,10 @@ export default function EventHero() {
   }, []);
 
   return (
-    <>
+    <div className="w-full overflow-hidden">
       {/* ✅ MOBILE IMAGE */}
       <div
-        className="relative block min-h-[260px] w-full overflow-hidden lg:hidden"
+        className="relative block h-[260px] w-full overflow-hidden lg:hidden"
         data-aos="zoom-in"
       >
         <Image
@@ -33,23 +32,27 @@ export default function EventHero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-[center_10%]"
+          className="object-cover object-center"
         />
       </div>
 
       {/* ✅ SECTION */}
-      <section className="w-full bg-[#2677a7] pb-20 mt-0 lg:mt-70">
-        <div className="w-full">
-          <div className="relative grid grid-cols-1 lg:grid-cols-[2fr_3fr]">
+      <section className="relative w-full overflow-hidden bg-[#2677a7] py-16 sm:py-20">
+        <div className="mx-auto max-w-[1600px] px-6 sm:px-10 lg:px-16">
+          <div className="relative grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
             
             {/* LEFT PANEL */}
             <div
-              className="relative z-10 flex items-center px-6 py-6 sm:px-10 lg:px-44"
+              className="relative z-10 flex items-center"
               data-aos="fade-right"
             >
-              <div className="relative max-w-[960px]">
+              <div className="max-w-[720px]">
                 <h2
-                  className="font-sans text-[26px] font-light leading-[1.4] tracking-[0.14em] text-white sm:text-[46px]"
+                  className="
+                    font-sans font-light tracking-[0.14em] text-white
+                    text-[22px] sm:text-[32px] lg:text-[44px]
+                    leading-snug
+                  "
                   data-aos="fade-up"
                   data-aos-delay="100"
                 >
@@ -57,7 +60,11 @@ export default function EventHero() {
                 </h2>
 
                 <p
-                  className="mt-6 text-[14px] leading-[1.9] text-white/95"
+                  className="
+                    mt-6 text-white/95
+                    text-[13px] sm:text-[14px] lg:text-[15px]
+                    leading-[1.9]
+                  "
                   data-aos="fade-up"
                   data-aos-delay="200"
                 >
@@ -86,7 +93,11 @@ export default function EventHero() {
 
             {/* DESKTOP IMAGE */}
             <div
-              className="relative hidden min-h-[320px] overflow-hidden lg:block lg:min-h-[720px] -mt-30"
+              className="
+                relative hidden lg:block
+                h-[520px] xl:h-[640px]
+                overflow-hidden
+              "
               data-aos="fade-left"
             >
               <Image
@@ -95,12 +106,12 @@ export default function EventHero() {
                 fill
                 priority
                 sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover object-[center_10%]"
+                className="object-cover object-center"
               />
             </div>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

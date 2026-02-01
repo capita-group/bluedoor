@@ -21,7 +21,7 @@ const dishes = [
 ];
 
 function ProgressRing({
-  size = 112,
+  size = 80,
   stroke = 4,
   progress = 0,
   className = "",
@@ -83,6 +83,7 @@ export default function HeroBanner() {
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [thumbSize, setThumbSize] = useState({ width: 80, height: 80 });
+  const [containerHeight, setContainerHeight] = useState("h-screen");
 
   // transfer animation state
   const [transfer, setTransfer] = useState(null);
@@ -98,7 +99,18 @@ export default function HeroBanner() {
     
     const checkMobile = () => {
       const width = window.innerWidth;
+      const height = window.innerHeight;
+      
       setIsMobile(width < 1024);
+      
+      // Adjust container height for mobile to accommodate stacked layout
+      if (width < 640) {
+        setContainerHeight("min-h-[110vh]");
+      } else if (width < 1024) {
+        setContainerHeight("min-h-screen");
+      } else {
+        setContainerHeight("h-screen");
+      }
       
       // Calculate thumb size based on screen width
       if (width < 480) {
@@ -111,8 +123,10 @@ export default function HeroBanner() {
         setThumbSize({ width: 80, height: 80 });
       } else if (width < 1280) {
         setThumbSize({ width: 88, height: 88 });
-      } else {
+      } else if (width < 1536) {
         setThumbSize({ width: 96, height: 96 });
+      } else {
+        setThumbSize({ width: 130, height: 130 });
       }
     };
     
@@ -166,25 +180,22 @@ export default function HeroBanner() {
   };
 
   // Calculate ring size based on thumb size
-  const getRingSize = () => {
-    if (isMobile) {
-      if (thumbSize.width <= 56) return 90;
-      if (thumbSize.width <= 64) return 100;
-      if (thumbSize.width <= 72) return 110;
-      return 120;
-    }
-    if (thumbSize.width <= 80) return 130;
-    if (thumbSize.width <= 88) return 140;
-    return 150;
-  };
-
-  // Calculate ring offset (inset) based on size
-  const getRingOffset = () => {
-    const ringSize = getRingSize();
-    const thumbSizeValue = Math.max(thumbSize.width, thumbSize.height);
-    const offset = (ringSize - thumbSizeValue) / 2 + 8; // 8px for border
-    return -offset;
-  };
+const getRingSize = () => {
+  if (isMobile) {
+    if (thumbSize.width <= 56) return 90;    // xs
+    if (thumbSize.width <= 64) return 100;   // sm
+    if (thumbSize.width <= 72) return 110;   // md
+    return 120;                              // lg mobile
+  }
+  
+  // Desktop sizes
+  if (thumbSize.width <= 80) return 100;     // lg
+  if (thumbSize.width <= 88) return 110;     // xl
+  if (thumbSize.width <= 96) return 130;     // 2xl
+  if (thumbSize.width <= 112) return 140;    // 3xl/4k
+  return 150;                                // Larger screens
+};
+ 
 
   if (!mounted) {
     return (
@@ -254,16 +265,21 @@ export default function HeroBanner() {
         /* Perfect ring positioning */
         .progress-ring-container {
           position: absolute;
-          top: 50%;
-          left: 50%;
+          top: 49%;
+          left: 49%;
           transform: translate(-50%, -50%);
           pointer-events: none;
           z-index: -1;
         }
+
+        /* Smooth image loading */
+        .dish-img {
+          transition: opacity 0.5s ease-in-out;
+        }
       `}</style>
 
       <section 
-        className="relative h-screen w-full overflow-hidden bg-white" 
+        className={`relative ${containerHeight} w-full overflow-hidden bg-white`}
         ref={containerRef}
         aria-label="Bluedoor Cafe & Bistro Hero Banner"
       >
@@ -283,243 +299,251 @@ export default function HeroBanner() {
         </div>
 
         <LayoutGroup id="dish-transfer">
-          <div className="relative z-10 h-full flex flex-col lg:flex-row items-center justify-center lg:justify-start px-4 sm:px-6 md:px-8 lg:px-16 xl:px-70 pt-16 lg:pt-0">
-            {/* LEFT CONTENT - Responsive layout */}
-            <div className="relative z-30 max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-6xl lg:mr-auto">
-              <p className="text-xs tracking-[0.4em] uppercase text-[#0a95eb] mb-2 sm:mb-3 hero-blue-text">
-                Bluedoor
-              </p>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-widest uppercase text-[#0f172a] leading-tight">
-                Cafe & <br className="hidden sm:block" /> Bistro
-              </h1>
-              <div className="flex items-center gap-3 sm:gap-4 my-4 sm:my-6">
-                <div className="h-px w-10 sm:w-12 md:w-14 bg-[#0a95eb]/60" />
-                <div className="h-px w-8 sm:w-10 bg-[#0f172a]/35" />
-              </div>
-              <p className="text-xs sm:text-sm md:text-base tracking-[0.3em] uppercase text-[#0a95eb]/80 font-light mb-3 sm:mb-4 hero-blue-text">
-                Crafted with passion
-              </p>
-
-              {/* Minimalist Opening Hours */}
-              <div className="backdrop-blur-xl bg-white/75 border border-[#0a95eb]/25 rounded-lg sm:rounded-xl p-3 sm:p-4 inline-block shadow-lg hero-blue-border">
-                <div className="flex items-center gap-2 mb-1 sm:mb-2">
-                  <div className="w-2 h-2 rounded-full bg-[#0a95eb] hero-animate-pulse" />
-                  <span className="text-xs font-semibold text-[#0a95eb] uppercase tracking-[0.25em] hero-blue-text">
-                    Open Today
-                  </span>
+          {/* Main content container with proper vertical alignment */}
+          <div className="relative z-10 h-full flex flex-col lg:flex-row items-center justify-center lg:justify-between px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 2xl:px-32 pt-8 sm:pt-12 lg:pt-0 pb-8 lg:pb-0">
+            
+            {/* LEFT CONTENT - Responsive layout with consistent alignment */}
+            <div className="order-2 lg:order-1 w-full lg:w-1/2 max-w-2xl xl:max-w-3xl mt-8 lg:mt-0 lg:pr-8 xl:pr-16 2xl:pl-50 flex flex-col justify-center">
+              <div className="text-center lg:text-left">
+                <p className="text-xs tracking-[0.4em] uppercase text-[#0a95eb] mb-2 sm:mb-3 hero-blue-text">
+                  Bluedoor
+                </p>
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-widest uppercase text-[#0f172a] leading-tight">
+                  Cafe & <br className="hidden sm:block" /> Bistro
+                </h1>
+                <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-4 my-4 sm:my-6">
+                  <div className="h-px w-10 sm:w-12 md:w-14 bg-[#0a95eb]/60" />
+                  <div className="h-px w-8 sm:w-10 bg-[#0f172a]/35" />
                 </div>
+                <p className="text-xs sm:text-sm md:text-base tracking-[0.3em] uppercase text-[#0a95eb]/80 font-light mb-3 sm:mb-4 hero-blue-text">
+                  Crafted with passion
+                </p>
 
-                <div className="text-xs sm:text-sm text-[#0f172a]">
-                  <div className="flex items-center gap-2">
-                    <span className="opacity-70">Mon–Thu:</span>
-                    <span className="font-medium text-[#0a95eb] hero-blue-text">8AM – 10PM</span>
+                {/* Minimalist Opening Hours */}
+                <div className="backdrop-blur-xl bg-white/75 border border-[#0a95eb]/25 rounded-lg sm:rounded-xl p-3 sm:p-4 inline-block shadow-lg hero-blue-border">
+                  <div className="flex items-center gap-2 mb-1 sm:mb-2">
+                    <div className="w-2 h-2 rounded-full bg-[#0a95eb] hero-animate-pulse" />
+                    <span className="text-xs font-semibold text-[#0a95eb] uppercase tracking-[0.25em] hero-blue-text">
+                      Open Today
+                    </span>
                   </div>
 
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="opacity-70">Fri–Sun:</span>
-                    <span className="font-medium text-[#0a95eb] hero-blue-text">8AM – 11PM</span>
+                  <div className="text-xs sm:text-sm text-[#0f172a]">
+                    <div className="flex items-center gap-2">
+                      <span className="opacity-70">Mon–Thu:</span>
+                      <span className="font-medium text-[#0a95eb] hero-blue-text">8AM – 10PM</span>
+                    </div>
+
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="opacity-70">Fri–Sun:</span>
+                      <span className="font-medium text-[#0a95eb] hero-blue-text">8AM – 11PM</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* RIGHT SECTION - Responsive positioning and sizing */}
-            <div className={`
-              relative lg:absolute 
-              ${isMobile ? 
-                "mt-8 lg:mt-0 right-0 lg:right-2 top-auto lg:top-1/2 lg:-translate-y-1/2 z-10 flex flex-col items-center gap-4 sm:gap-6" : 
-                "mt-8 lg:mt-0 right-4 lg:right-16 top-auto lg:top-1/2 lg:-translate-y-1/2 z-10 flex flex-col lg:flex-row items-center gap-6 lg:gap-10 xl:gap-14 lg:pr-48"
-              }
-            `}>
-              {/* MAIN DISH IMAGE - Responsive sizing */}
-              <div
-                className={`
-                  relative
-                  ${isMobile ? 
-                    "w-[200px] h-[200px] xs:w-[240px] xs:h-[240px] sm:w-[280px] sm:h-[280px]" : 
-                    "w-[280px] h-[280px] md:w-[360px] md:h-[360px] lg:w-[400px] lg:h-[380px] xl:w-[530px] xl:h-[500px]"
-                  }
-                `}
-                onMouseEnter={() => !isMobile && mainSwiperRef.current?.autoplay?.stop()}
-                onMouseLeave={() => !isMobile && mainSwiperRef.current?.autoplay?.start()}
-              >
-                {/* Circular rotation container - Hide on mobile for performance */}
-                {!isMobile && (
-                  <motion.div
-                    className="absolute inset-0 grid place-items-center pointer-events-none z-20 hero-motion-div"
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 24,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                    aria-hidden="true"
-                  >
-                    <div className="absolute w-[75%] h-[75%] rounded-full border border-[#0a95eb]/10 hero-blue-border" />
-                  </motion.div>
-                )}
+            {/* RIGHT SECTION - Image with thumbs, centered vertically */}
+            <div className="order-1 lg:order-2 w-full lg:w-1/2 flex flex-col items-center justify-center lg:justify-center mt-12 md:mt-40 lg:mt-30 2xl:mt-0">
+              <div className="flex flex-col lg:flex-row items-center justify-center gap-6  xl:gap-14">
+                
+                {/* MAIN DISH IMAGE - Responsive sizing */}
+                <div
+                  className={`
+                    relative
+                    ${isMobile ? 
+                      "w-[200px] h-[200px] xs:w-[240px] xs:h-[240px] sm:w-[300px] sm:h-[300px]" : 
+                      "w-[320px] h-[320px] md:w-[380px] md:h-[360px] lg:w-[370px] lg:h-[360px] xl:w-[400px] xl:h-[400px] 2xl:w-[500px] 2xl:h-[500px]"
+                    }
+                  `}
+                  onMouseEnter={() => !isMobile && mainSwiperRef.current?.autoplay?.stop()}
+                  onMouseLeave={() => !isMobile && mainSwiperRef.current?.autoplay?.start()}
+                >
+                  {/* Circular rotation container - Hide on mobile for performance */}
+                  {!isMobile && (
+                    <motion.div
+                      className="absolute inset-0 grid place-items-center pointer-events-none z-20 hero-motion-div"
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 24,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                      aria-hidden="true"
+                    >
+                      <div className="absolute w-[75%] h-[75%] rounded-full border border-[#0a95eb]/10 hero-blue-border" />
+                    </motion.div>
+                  )}
 
-                {/* transfer target */}
-                <div className="absolute inset-0 grid place-items-center pointer-events-none z-30">
-                  <div className="relative w-[72%] h-[72%]">
-                    <AnimatePresence>
-                      {transfer?.stage === "main" &&
-                        transfer?.id === activeDish.id && (
-                          <motion.div
-                            layoutId={`dish-${transfer.id}`}
-                            className="absolute inset-0 hero-motion-div"
-                            initial={{
-                              opacity: 0.9,
-                              filter: "blur(0px)",
-                              scale: 1,
-                            }}
-                            animate={{
-                              opacity: 0,
-                              filter: "blur(10px)",
-                              scale: 1.12,
-                            }}
-                            exit={{ opacity: 0 }}
-                            transition={{
-                              duration: 0.55,
-                              ease: [0.22, 1, 0.36, 1],
-                            }}
-                            onAnimationComplete={() => setTransfer(null)}
-                          >
-                            <div className="relative w-full h-full">
-                              <Image
-                                src={activeDish.src}
-                                alt={activeDish.alt}
-                                fill
-                                className="object-contain"
-                                sizes={isMobile ? "(max-width: 480px) 200px, (max-width: 640px) 240px, 280px" : "(max-width: 768px) 280px, (max-width: 1024px) 360px, (max-width: 1280px) 400px, 530px"}
-                                priority
-                              />
-                            </div>
-                          </motion.div>
-                        )}
-                    </AnimatePresence>
+                  {/* transfer target */}
+                  <div className="absolute inset-0 grid place-items-center pointer-events-none z-30">
+                    <div className="relative w-[72%] h-[72%]">
+                      <AnimatePresence>
+                        {transfer?.stage === "main" &&
+                          transfer?.id === activeDish.id && (
+                            <motion.div
+                              layoutId={`dish-${transfer.id}`}
+                              className="absolute inset-0 hero-motion-div"
+                              initial={{
+                                opacity: 0.9,
+                                filter: "blur(0px)",
+                                scale: 1,
+                              }}
+                              animate={{
+                                opacity: 0,
+                                filter: "blur(10px)",
+                                scale: 1.12,
+                              }}
+                              exit={{ opacity: 0 }}
+                              transition={{
+                                duration: 0.55,
+                                ease: [0.22, 1, 0.36, 1],
+                              }}
+                              onAnimationComplete={() => setTransfer(null)}
+                            >
+                              <div className="relative w-full h-full">
+                                <Image
+                                  src={activeDish.src}
+                                  alt={activeDish.alt}
+                                  fill
+                                  className="object-contain"
+                                  sizes={isMobile ? "(max-width: 480px) 200px, (max-width: 640px) 240px, 300px" : "(max-width: 768px) 320px, (max-width: 1024px) 380px, (max-width: 1280px) 420px, 480px"}
+                                  priority
+                                />
+                              </div>
+                            </motion.div>
+                          )}
+                      </AnimatePresence>
+                    </div>
                   </div>
+
+                  {/* Main dish image with circular rotation - Conditional animation */}
+                  <motion.div
+                    className="absolute inset-0 grid place-items-center z-10 hero-motion-div"
+                    animate={!isMobile ? { rotate: 360 } : {}}
+                    transition={
+                      !isMobile
+                        ? {
+                            duration: 48,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }
+                        : {}
+                    }
+                  >
+                    <Swiper
+                      modules={[Autoplay, EffectFade]}
+                      effect="fade"
+                      fadeEffect={{ crossFade: true }}
+                      speed={900}
+                      loop
+                      slidesPerView={1}
+                      allowTouchMove={isMobile}
+                      autoplay={{ 
+                        delay: AUTOPLAY_MS, 
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: !isMobile 
+                      }}
+                      onSwiper={(s) => (mainSwiperRef.current = s)}
+                      onRealIndexChange={(s) => setActive(s.realIndex)}
+                      onAutoplayTimeLeft={(_, __, prog) => setProgress(1 - prog)}
+                      className="w-full h-full"
+                    >
+                      {dishes.map((dish) => (
+                        <SwiperSlide key={dish.id} className="hero-swiper-slide">
+                          <div className="relative w-full h-full">
+                            <Image
+                              src={dish.src}
+                              alt={dish.alt}
+                              fill
+                              className="dish-img object-contain select-none"
+                              sizes={`(max-width: 480px) 200px, (max-width: 640px) 240px, (max-width: 768px) 300px, (max-width: 1024px) 320px, (max-width: 1280px) 380px, 480px`}
+                              priority
+                            />
+                          </div>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </motion.div>
                 </div>
 
-                {/* Main dish image with circular rotation - Conditional animation */}
-                <motion.div
-                  className="absolute inset-0 grid place-items-center z-10 hero-motion-div"
-                  animate={!isMobile ? { rotate: 360 } : {}}
-                  transition={
-                    !isMobile
-                      ? {
-                          duration: 48,
-                          repeat: Infinity,
-                          ease: "linear",
-                        }
-                      : {}
-                  }
-                >
-                  <Swiper
-                    modules={[Autoplay, EffectFade]}
-                    effect="fade"
-                    fadeEffect={{ crossFade: true }}
-                    speed={900}
-                    loop
-                    slidesPerView={1}
-                    allowTouchMove={isMobile}
-                    autoplay={{ 
-                      delay: AUTOPLAY_MS, 
-                      disableOnInteraction: false,
-                      pauseOnMouseEnter: !isMobile 
-                    }}
-                    onSwiper={(s) => (mainSwiperRef.current = s)}
-                    onRealIndexChange={(s) => setActive(s.realIndex)}
-                    onAutoplayTimeLeft={(_, __, prog) => setProgress(1 - prog)}
-                    className="w-full h-full"
-                  >
-                    {dishes.map((dish) => (
-                      <SwiperSlide key={dish.id} className="hero-swiper-slide">
-                        <div className="relative w-full h-full">
-                          <Image
-                            src={dish.src}
-                            alt={dish.alt}
-                            fill
-                            className="dish-img object-contain select-none"
-                            sizes={`(max-width: 480px) 200px, (max-width: 640px) 240px, (max-width: 768px) 280px, (max-width: 1024px) 360px, (max-width: 1280px) 400px, 530px`}
-                            priority
-                          />
-                        </div>
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                </motion.div>
-              </div>
+                {/* THUMBS - Responsive layout and sizing */}
+                <div className={`
+                  flex ${isMobile ? "flex-row" : "flex lg:mr-30 xl:mr-40 2xl:mr-70"}
+                  ${isMobile ? "gap-6 sm:gap-8" : "gap-5"}
+                  ${isMobile ? "mt-4" : "mt-4"}
+                `}>
+                  {orderedThumbs.map((dish, idx) => {
+                    const originalIndex = dishes.findIndex((d) => d.id === dish.id);
+                    const isFirst = idx === 0;
+                    const ringSize = getRingSize();
+              
 
-              {/* THUMBS - Responsive layout and sizing */}
-              <div className={`
-                flex 
-                ${isMobile ? 
-                  "flex-row gap-8 mt-4" : 
-                  "gap-6 sm:gap-8 lg:gap-10"
-                }
-              `}>
-                {orderedThumbs.map((dish, idx) => {
-                  const originalIndex = dishes.findIndex((d) => d.id === dish.id);
-                  const isFirst = idx === 0;
-                  const ringSize = getRingSize();
-                  const ringOffset = getRingOffset();
+                    return (
+                      <div key={dish.id} className="relative">
+                        {isFirst && (
+                          <div 
+                            className="progress-ring-container"
+                            style={{
+                              width: `${ringSize}px`,
+                              height: `${ringSize}px`,
+                            }}
+                          >
+                            <ProgressRing
+                              size={ringSize}
+                              stroke={4}
+                              progress={progress}
+                            />
+                          </div>
+                        )}
 
-                  return (
-                    <div key={dish.id} className="relative">
-                      {isFirst && (
-                        <div 
-                          className="progress-ring-container"
-                          style={{
-                            width: `${ringSize}px`,
-                            height: `${ringSize}px`,
-                          }}
+                        <button
+                          type="button"
+                          onMouseEnter={() => !isMobile && goTo(originalIndex)}
+                          onClick={() => goTo(originalIndex)}
+                          onKeyDown={(e) => handleKeyDown(e, originalIndex)}
+                          className="relative focus:outline-none focus:ring-2 focus:ring-[#0a95eb] focus:ring-offset-2 rounded-full hero-touch-button"
+                          aria-label={`Show ${dish.alt}`}
+                          aria-current={isFirst ? "true" : "false"}
                         >
-                          <ProgressRing
-                            size={ringSize}
-                            stroke={4}
-                            progress={progress}
-                          />
-                        </div>
-                      )}
-
-                      <button
-                        type="button"
-                        onMouseEnter={() => !isMobile && goTo(originalIndex)}
-                        onClick={() => goTo(originalIndex)}
-                        onKeyDown={(e) => handleKeyDown(e, originalIndex)}
-                        className="relative focus:outline-none focus:ring-2 focus:ring-[#0a95eb] focus:ring-offset-2 rounded-full hero-touch-button"
-                        aria-label={`Show ${dish.alt}`}
-                        aria-current={isFirst ? "true" : "false"}
-                      >
-                        <div
-                          className={`
-                            relative
-                            ${isMobile ? 
-                              "w-14 h-14 xs:w-16 xs:h-16 sm:w-18 sm:h-18" : 
-                              "w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 lg:w-22 lg:h-22 xl:w-24 xl:h-24"
-                            }
-                            rounded-full border-2
-                            transition-all duration-300
-                            hover:scale-110
-                            active:scale-105
-                            ${isFirst ? 
-                              "border-[#CFE3FA] scale-110 shadow-xl lg:shadow-2xl bg-white" : 
-                              "border-[#CFE3FA] border-dashed hover:border-[#1F3B63]/60 hero-blue-border bg-white/95"
-                            }
-                          `}
-                          style={{
-                            width: `${thumbSize.width}px`,
-                            height: `${thumbSize.height}px`,
-                          }}
-                        >
-                          {isFirst &&
-                          transfer?.stage === "thumb" &&
-                          transfer?.id === dish.id ? (
-                            <motion.div
-                              layoutId={`dish-${dish.id}`}
-                              className="absolute inset-0 hero-motion-div"
-                            >
+                          <div
+                            className={`
+                              relative
+                              ${isMobile ? 
+                                "w-14 h-14 xs:w-16 xs:h-16 sm:w-18 sm:h-18" : 
+                                "w-16 h-16 sm:w-18 sm:h-18 xl:w-24 xl:h-24"
+                              }
+                              rounded-full border-2
+                              transition-all duration-300
+                              hover:scale-110
+                              active:scale-105
+                              ${isFirst ? 
+                                "border-[#CFE3FA] scale-110 shadow-xl lg:shadow-2xl bg-white" : 
+                                "border-[#CFE3FA] border-dashed hover:border-[#1F3B63]/60 hero-blue-border bg-white/95"
+                              }
+                            `}
+                            style={{
+                              width: `${thumbSize.width}px`,
+                              height: `${thumbSize.height}px`,
+                            }}
+                          >
+                            {isFirst &&
+                            transfer?.stage === "thumb" &&
+                            transfer?.id === dish.id ? (
+                              <motion.div
+                                layoutId={`dish-${dish.id}`}
+                                className="absolute inset-0 hero-motion-div"
+                              >
+                                <Image
+                                  src={dish.src}
+                                  alt={dish.alt}
+                                  fill
+                                  className="object-contain p-2 xs:p-3 sm:p-4 select-none"
+                                  sizes={`${thumbSize.width}px`}
+                                  priority={isFirst}
+                                />
+                              </motion.div>
+                            ) : (
                               <Image
                                 src={dish.src}
                                 alt={dish.alt}
@@ -528,29 +552,20 @@ export default function HeroBanner() {
                                 sizes={`${thumbSize.width}px`}
                                 priority={isFirst}
                               />
-                            </motion.div>
-                          ) : (
-                            <Image
-                              src={dish.src}
-                              alt={dish.alt}
-                              fill
-                              className="object-contain p-2 xs:p-3 sm:p-4 select-none"
-                              sizes={`${thumbSize.width}px`}
-                              priority={isFirst}
-                            />
-                          )}
-                        </div>
-                      </button>
-                    </div>
-                  );
-                })}
+                            )}
+                          </div>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
         </LayoutGroup>
 
         {/* SCROLL INDICATOR - Responsive positioning */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 sm:bottom-6">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 sm:bottom-6 md:hidden xl:block">
           <div className="hero-animate-bounce text-center">
             <div className="h-6 sm:h-8 w-px bg-[#0a95eb]/60 mx-auto" />
             <p className="text-xs text-[#0a95eb]/70 mt-1 sm:mt-2 tracking-widest uppercase hero-blue-text">
