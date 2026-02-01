@@ -24,28 +24,32 @@ function Thumb({ src, shape = "circle", alt }) {
   return (
     <span
       className={[
-        "relative inline-block overflow-hidden",
-        "w-[54px] h-[54px] sm:w-[62px] sm:h-[62px] lg:w-[128px] lg:h-[128px]",
+        "relative inline-block overflow-hidden shrink-0",
+        // ✅ responsive thumb sizes
+        "w-[44px] h-[44px] xs:w-[50px] xs:h-[50px] sm:w-[62px] sm:h-[62px] lg:w-[110px] lg:h-[110px] xl:w-[128px] xl:h-[128px]",
         "ring-1 ring-white/10",
         shapeClass,
       ].join(" ")}
     >
-      <Image src={src} alt={alt} fill className="object-cover" sizes="100px" />
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className="object-cover"
+        sizes="(max-width: 640px) 56px, (max-width: 1024px) 80px, 128px"
+        priority={false}
+      />
     </span>
   );
 }
 
-export default function DrinkMarquee({
-  speed = 42, // smaller = faster (seconds)
-}) {
-  // duplicate list for seamless loop
+export default function DrinkMarquee({ speed = 42 }) {
   const loop = useMemo(() => [...items, ...items], []);
 
   return (
-    <section className="w-full">
-      {/* one row */}
+    // ✅ prevent page horizontal scroll on mobile
+    <section className="w-full overflow-hidden">
       <MarqueeRow items={loop} duration={speed} />
-      {/* second row (slightly different speed + direction) */}
       <MarqueeRow items={loop} duration={Math.max(8, speed - 2)} reverse />
     </section>
   );
@@ -53,14 +57,16 @@ export default function DrinkMarquee({
 
 function MarqueeRow({ items, duration = 12, reverse = false }) {
   return (
-    <div className="relative overflow-hidden py-7 sm:py-8 lg:py-10">
-      {/* subtle lines like screenshot */}
+    <div className="relative overflow-hidden py-6 sm:py-8 lg:py-10 [contain:paint]">
+      {/* subtle lines */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-blue-900/10" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-blue-900/10" />
 
       <div
         className={[
-          "flex w-max items-center gap-16 sm:gap-24 lg:gap-28",
+          "flex w-max items-center",
+          // ✅ responsive spacing
+          "gap-10 sm:gap-16 lg:gap-24 xl:gap-28",
           reverse ? "animate-marquee-rev" : "animate-marquee",
           "will-change-transform",
         ].join(" ")}
@@ -69,17 +75,24 @@ function MarqueeRow({ items, duration = 12, reverse = false }) {
         {items.map((it, idx) => (
           <div
             key={`${it.title}-${idx}`}
-            className="flex items-center gap-6 sm:gap-8 lg:gap-10"
+            className="flex items-center gap-4 sm:gap-6 lg:gap-10"
           >
             <Thumb src={it.img} shape={it.shape} alt={it.title} />
-            <span className="select-none whitespace-nowrap font-serif uppercase tracking-[0.22em] text-[30px] sm:text-[42px] lg:text-[56px] text-[#2677a7]">
+
+            {/* ✅ smooth responsive font scaling */}
+            <span
+              className="select-none whitespace-nowrap font-serif uppercase text-[#2677a7]"
+              style={{
+                fontSize: "clamp(18px, 4vw, 56px)",
+                letterSpacing: "0.22em",
+              }}
+            >
               {it.title}
             </span>
           </div>
         ))}
       </div>
 
-      {/* motion safety */}
       <style jsx global>{`
         @keyframes marquee {
           0% {

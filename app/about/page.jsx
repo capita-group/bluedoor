@@ -15,11 +15,9 @@ export default function AboutPage() {
      <AboutShowcase/>
      <DrinkMarquee/>
      <BookEvent/>
-     {/* <EventHero/> */}
-
      <VideoHero
       poster="/img/drink1.jpg"
-      videoSrc="/video/banner.mp4"
+      videoSrc="/video/hero.mp4"
     />
     <InstagramStrip/>
 

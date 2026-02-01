@@ -6,9 +6,14 @@ import { useEffect } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
+// ✅ import image from /public
+import corporate from "@/public/img/corporate.jpg";
+import celebration from "@/public/img/celebration.jpg";
+import wedding from "@/public/img/wedding.jpg";
+
 const events = [
   {
-    image: "/img/plate.jpg",
+    image: celebration,
     title: "Celebrations",
     date: "Friday, 21 Nov",
     time: "Reservations 12pm To 1.30pm",
@@ -16,7 +21,7 @@ const events = [
     aos: "fade-right",
   },
   {
-    image: "/img/plate.jpg",
+    image: wedding,
     title: "Weddings",
     date: "Monday, 17 Nov",
     time: "Reservations 1pm To 3.30pm",
@@ -24,7 +29,7 @@ const events = [
     aos: "zoom-in",
   },
   {
-    image: "/img/plate.jpg",
+    image: corporate,
     title: "Corporate",
     date: "Wednesday, 26 Nov",
     time: "Reservations 3pm To 5.30pm",
@@ -44,14 +49,14 @@ export default function BookEvent() {
   }, []);
 
   return (
-    <section className="relative w-full py-14 sm:py-18 lg:py-28 mt-40">
+    <section className="relative w-full py-14 sm:py-18 lg:py-28 mt-28 sm:mt-32 lg:mt-40 overflow-hidden">
       <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-10">
         {/* HEADER */}
         <div
           className="mx-auto mb-10 sm:mb-14 lg:mb-16 max-w-2xl text-center"
           data-aos="fade-up"
         >
-          <h2 className="text-[20px] sm:text-[26px] lg:text-[38px] font-semibold tracking-[0.32em] text-[#2677a7] uppercase">
+          <h2 className="text-[18px] sm:text-[26px] lg:text-[38px] font-semibold tracking-[0.28em] sm:tracking-[0.32em] text-[#2677a7] uppercase">
             Book Your Event
           </h2>
 
@@ -88,11 +93,10 @@ function EventCard({ image, title, date, time, variant, aos }) {
           className={[
             "relative overflow-hidden bg-black/10",
             "transition-transform duration-500 group-hover:scale-[1.02]",
+            // ✅ responsive heights (mobile -> 2xl)
             isArch
-              ? // middle (arch)
-                "mx-auto w-full max-w-[420px] h-[340px] sm:h-[420px] lg:h-[520px] rounded-t-[420px] rounded-b-none"
-              : // left & right (tall rectangle)
-                "mx-auto w-full max-w-[420px] h-[380px] sm:h-[480px] lg:h-[600px] rounded-md",
+              ? "mx-auto w-full max-w-[420px] h-[280px] xs:h-[320px] sm:h-[380px] md:h-[420px] lg:h-[520px] rounded-t-[420px] rounded-b-none"
+              : "mx-auto w-full max-w-[420px] h-[300px] xs:h-[340px] sm:h-[420px] md:h-[460px] lg:h-[600px] rounded-md",
           ].join(" ")}
           style={
             isArch
@@ -108,16 +112,15 @@ function EventCard({ image, title, date, time, variant, aos }) {
             alt={title}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
-            sizes="(max-width: 1024px) 100vw, 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 60vw, 33vw"
             priority={isArch}
           />
-
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30 opacity-70" />
         </div>
       </div>
 
       {/* TEXT */}
-      <h3 className="mt-8 text-[15px] sm:text-[17px] lg:text-[18px] tracking-[0.35em] uppercase text-[#2677a7]">
+      <h3 className="mt-7 sm:mt-8 text-[14px] sm:text-[17px] lg:text-[18px] tracking-[0.28em] sm:tracking-[0.35em] uppercase text-[#2677a7]">
         {title}
       </h3>
 

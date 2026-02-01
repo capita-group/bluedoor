@@ -2,16 +2,31 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default function AboutShowcase() {
+  useEffect(() => {
+    AOS.init({
+      duration: 900,
+      easing: "ease-out-cubic",
+      once: true,
+      offset: 80,
+    });
+  }, []);
+
   return (
-    <section className="relative w-full py-10 sm:py-16 md:py-20 lg:py-32 mb-20">
+     <section className="relative w-full overflow-hidden py-10 sm:py-16 md:py-20 lg:py-32 mb-20">
       <div className="relative mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
         {/* keep large layout exactly: lg:grid-cols-12 */}
         <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-8 lg:gap-0">
           
           {/* VIDEO - top on mobile, left on lg */}
-          <div className="relative lg:col-span-4 z-30 order-1 lg:order-1">
+          <div
+            className="relative lg:col-span-4 z-30 order-1 lg:order-1"
+            data-aos="fade-right"
+          >
             <div className="relative h-[220px] sm:h-[300px] md:h-[380px] lg:h-[450px] xl:h-[550px] 2xl:h-[650px] w-full overflow-hidden rounded-lg lg:rounded-none">
               <video
                 src="/video/about.mp4"
@@ -25,7 +40,10 @@ export default function AboutShowcase() {
           </div>
 
           {/* CONTENT - middle & centered on mobile, original overlap on lg */}
-          <div className="relative lg:col-span-4 z-10 order-2 lg:order-2 flex justify-center lg:block lg:-mx-10 xl:-mx-14 2xl:-mx-16">
+          <div
+            className="relative lg:col-span-4 z-10 order-2 lg:order-2 flex justify-center lg:block lg:-mx-10 xl:-mx-14 2xl:-mx-16"
+            data-aos="zoom-in"
+          >
             <div className="w-full max-w-[560px] lg:max-w-none">
               <div className="bg-[#2677a7] text-center px-4 sm:px-6 md:px-7 lg:px-10 xl:px-16 2xl:px-22 py-7 sm:py-8 md:py-10 lg:py-16 xl:py-24 2xl:py-52 shadow-xl rounded-lg lg:rounded-none">
                 
@@ -61,10 +79,13 @@ export default function AboutShowcase() {
           </div>
 
           {/* IMAGE - bottom on mobile, right on lg */}
-          <div className="relative lg:col-span-4 z-30 order-3 lg:order-3">
+          <div
+            className="relative lg:col-span-4 z-30 order-3 lg:order-3"
+            data-aos="fade-left"
+          >
             <div className="relative h-[220px] sm:h-[300px] md:h-[380px] lg:h-[450px] xl:h-[550px] 2xl:h-[650px] w-full overflow-hidden rounded-lg lg:rounded-none">
               <Image
-                src="/img/connect (4).jpg"
+                src="/img/connect.jpg"
                 alt="Blue Door Cafe & Bistro interior"
                 fill
                 className="object-cover"

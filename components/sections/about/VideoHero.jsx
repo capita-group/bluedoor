@@ -5,8 +5,8 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 export default function VideoHero({
-  poster = "/img/your-poster.jpg",
-  videoSrc = "/video/banner.mp4",
+  poster = "/img/drink1.jpg",
+  videoSrc = "/video/goal.mp4",
   height = "h-[260px] sm:h-[340px] md:h-[420px] lg:h-[520px]",
 }) {
   const [open, setOpen] = useState(false);
